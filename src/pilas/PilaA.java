@@ -88,6 +88,11 @@ public class PilaA <T> implements PilaADT<T>{
     public boolean isEmpty() {
         return tope == -1;
     }
+
+    @Override
+    public boolean equals() {
+        return true;
+    }
     
     
 }

@@ -13,5 +13,6 @@ public interface PilaADT <T> {
     void push(T dato);
     T pop();
     T peek();
-    boolean isEmpty();    
+    boolean isEmpty();  
+    boolean equals();
 }
