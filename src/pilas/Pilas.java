@@ -157,16 +157,61 @@ public class Pilas {
         }
         return equal;
     }
+    
+    public static<T> boolean sonCasiIguales(PilaADT<T> pila1, PilaADT<T> pila2, int n){
+        boolean sonCasiIguales;
+        PilaADT<T> pilaAuxiliar1, pilaAuxiliar2;
+        int contador1, contador2, i;
+        
+//        if(n < 0)
+//            sonCasiIguales = false;
+//        else
+        try{
+            sonCasiIguales = false;
+            pilaAuxiliar1 = new PilaA<T>();
+            contador1 = 0;
+            while(!pila1.isEmpty()){
+                pilaAuxiliar1.push(pila1.pop());
+                contador1++;
+            }
+            if(contador1 >= n){
+                pilaAuxiliar2 = new PilaA<T>();
+                contador2 = 0;
+                while(!pila2.isEmpty()){
+                    pilaAuxiliar2.push(pila2.pop());
+                    contador2++;
+                }//end while
+                if(contador2 >= n){
+                    i = 0;
+                    while(i < n && pilaAuxiliar1.peek().equals(pilaAuxiliar2.peek())){
+                        i++;
+                        pila2.push(pilaAuxiliar2.pop());
+                        pila1.push(pilaAuxiliar1.pop());
+                    }
+                    if(i == n)
+                        sonCasiIguales = true;       
+                }// end if
+                while(!pilaAuxiliar2.isEmpty())
+                    pila2.push(pilaAuxiliar2.pop());  
+            }//end outter-if
+            while(!pilaAuxiliar1.isEmpty())
+                    pila1.push(pilaAuxiliar1.pop());    
+        }catch(NullPointerException e){
+           sonCasiIguales = false;
+        }
+        return sonCasiIguales;
+    }
+    
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        RevisorParentesis revisa = new RevisorParentesis("22+6+(3)+(9+7");
-        System.out.println(revisa.analizaString());
-        revisa.setAnalizar("()");
-        System.out.println(revisa.analizaString());
-        revisa.setAnalizar(")");
-        System.out.println(revisa.analizaString());
+//        RevisorParentesis revisa = new RevisorParentesis("22+6+(3)+(9+7");
+//        System.out.println(revisa.analizaString());
+//        revisa.setAnalizar("()");
+//        System.out.println(revisa.analizaString());
+//        revisa.setAnalizar(")");
+//        System.out.println(revisa.analizaString());
         
         PilaA<Integer> pila, pila2;
 //        PilaA<Double> pila2;
@@ -177,12 +222,14 @@ public class Pilas {
 //        pila2 = new PilaA<Double>();
         for(i = 0; i < 50; i++)
            pila.push(i + 1);
-        for(i = 20; i > 0; i--){
-           if(i % 2 == 0)
-               pila2.push(i);
-           else
-               pila2.push(i - 1);
-        }
+        for(i = 0; i < 4; i++)
+           pila2.push(i + 1);
+//        for(i = 20; i > 0; i--){
+//           if(i % 2 == 0)
+//               pila2.push(i);
+//           else
+//               pila2.push(i - 1);
+//        }
 //        for(i = 20; i > 0; i--){
 //           if(i % 2 == 0)
 //               pila2.push((double)i);
@@ -194,15 +241,16 @@ public class Pilas {
 //        System.out.println(cuentaElementos(pila));
 //        System.out.println(determinaContenida(pila, pila2));
 
-        System.out.println(imprimePila(pila));
-        invierteElementos(pila);
-        System.out.println(imprimePila(pila));
-        quitaRepetidos(pila);
-        System.out.println(imprimePila(pila));
+//        System.out.println(imprimePila(pila));
+//        invierteElementos(pila);
+//        System.out.println(imprimePila(pila));
+//        quitaRepetidos(pila);
+//        System.out.println(imprimePila(pila));
+        System.out.println(sonCasiIguales(pila, pila2, -1));
         
         
         
-        System.out.println(equals(pila, pila2));
+//        System.out.println(equals(pila, pila2));
     }
     
 }
