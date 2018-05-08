@@ -5,6 +5,8 @@
  */
 package pilas;
 
+import java.util.Arrays;
+
 /**
  *
  * @author edi
@@ -90,9 +92,44 @@ public class PilaA <T> implements PilaADT<T>{
     }
 
     @Override
-    public boolean equals() {
+    public boolean equals(Object otra) {
+        boolean iguales;
+        PilaA<T> otraPila;
+        
+        if(otra != null){
+            if(otra == this)
+                iguales = true;
+            else if(otra.getClass().getSimpleName().equals("PilaA")){
+                otraPila = new 
+            }
+        }
+    }
+
+   
+    public int hashCode() {
+        int hash = 3;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final PilaA<?> other = (PilaA<?>) obj;
+        if (!Arrays.deepEquals(this.coleccion, other.coleccion)) {
+            return false;
+        }
         return true;
     }
+    
+    
     
     
 }

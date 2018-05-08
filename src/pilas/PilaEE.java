@@ -41,4 +41,10 @@ public class PilaEE<T> implements PilaADT<T>{
             respuesta = null;
         return respuesta;          
     }
+
+    @Override
+    public boolean equals(Object otra) {
+        return pila.equals(otra); 
+    }
+
 }

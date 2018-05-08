@@ -14,5 +14,5 @@ public interface PilaADT <T> {
     T pop();
     T peek();
     boolean isEmpty();  
-    boolean equals();
+    boolean equals(Object pila);
 }
