@@ -6,6 +6,7 @@
 package pilas;
 
 import estructurasenlzadas.Nodo;
+import java.util.Iterator;
 
 /**
  *
@@ -22,7 +23,7 @@ public class PilaEE2<T> implements PilaADT<T>{
     public boolean equals(Object obj) {
         boolean iguales;
         PilaEE2<T> otra;
-        Nodo<T> auxiliar;
+        Nodo<T> aux, auxOtra;
         
         if(obj != null){
             if(obj == this)
@@ -30,7 +31,8 @@ public class PilaEE2<T> implements PilaADT<T>{
             else if(obj.getClass().getSimpleName().equals(this.getClass().getSimpleName())){
                 otra = (PilaEE2<T>) obj;
                 iguales = true;
-                while(!isEmpty() && iguales){
+                
+                while(!isEmpty() && iguales && auxObj.getDireccion() != null){
                     
                 }
             }
