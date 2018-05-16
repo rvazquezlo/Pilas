@@ -96,40 +96,15 @@ public class PilaA <T> implements PilaADT<T>{
         boolean iguales;
         PilaA<T> otraPila;
         
+        iguales = false;
         if(otra != null){
             if(otra == this)
                 iguales = true;
             else if(otra.getClass().getSimpleName().equals("PilaA")){
-                otraPila = new 
+                otraPila = (PilaA<T>)otra;
+                iguales = Arrays.deepEquals(this.coleccion, otraPila.coleccion);
             }
         }
-    }
-
-   
-    public int hashCode() {
-        int hash = 3;
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final PilaA<?> other = (PilaA<?>) obj;
-        if (!Arrays.deepEquals(this.coleccion, other.coleccion)) {
-            return false;
-        }
-        return true;
-    }
-    
-    
-    
-    
+        return iguales;
+    }   
 }

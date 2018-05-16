@@ -27,7 +27,7 @@ public class PilaEE2<T> implements PilaADT<T>{
         if(obj != null){
             if(obj == this)
                 iguales = true;
-            else if(obj.getClass().getSimpleName().equals(this.getClass().getSimpleName())){
+            else if(obj instanceof PilaEE2){
                 otra = (PilaEE2<T>) obj;
                 iguales = true;
                 while(!isEmpty() && iguales){

@@ -385,5 +385,27 @@ public class LinkedList<T> implements Iterable<T>{
         }
         return contador;
     }
+    
+    public boolean equals(Object otra){
+        boolean iguales;
+        Iterator<T> iterador, iteradorOtra;
+        LinkedList<T> otraLista;
+        
+        iguales = false;
+        if(otra != null){
+            if(otra == this)
+                iguales = true;
+            else if(otra instanceof LinkedList){
+                otraLista = (LinkedList<T>)otra;
+                iteradorOtra = otraLista.iterator();
+                iterador = this.iterator();
+                iguales = true;
+                while(iterador.hasNext() && iteradorOtra.hasNext() && iguales){
+                    
+                }
+            }
+                
+        }
+    }
      
 }

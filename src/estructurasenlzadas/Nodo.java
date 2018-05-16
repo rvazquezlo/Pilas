@@ -5,9 +5,11 @@
  */
 package estructurasenlzadas;
 
+import java.util.Objects;
+
 /**
  *
- * @author hca
+ * @author Regina Vazquez
  */
 public class Nodo <T>{
     private T dato;
@@ -42,5 +44,33 @@ public class Nodo <T>{
     public String toString() {
         return "Nodo{" + "dato=" + dato + ", direccion=" + direccion + '}';
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Nodo<?> other = (Nodo<?>) obj;
+        if (!Objects.equals(this.dato, other.dato)) {
+            return false;
+        }
+        if (!Objects.equals(this.direccion, other.direccion)) {
+            return false;
+        }
+        return true;
+    }
+    
     
 }
