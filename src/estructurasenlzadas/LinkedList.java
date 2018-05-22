@@ -10,7 +10,7 @@ import java.util.Iterator;
 
 /**
  *
- * @author hca
+ * @author Regina Vazquez
  */
 public class LinkedList<T> implements Iterable<T>{
     private Nodo<T> inicio; //el primer nodo de a lista
@@ -22,6 +22,22 @@ public class LinkedList<T> implements Iterable<T>{
     public LinkedList(){
         inicio = null;
         fin = null;
+    }
+
+    private Nodo<T> getInicio() {
+        return inicio;
+    }
+
+    private Nodo<T> getFin() {
+        return fin;
+    }
+
+    private void setInicio(Nodo<T> inicio) {
+        this.inicio = inicio;
+    }
+
+    private void setFin(Nodo<T> fin) {
+        this.fin = fin;
     }
     
     /**
@@ -195,6 +211,8 @@ public class LinkedList<T> implements Iterable<T>{
             else if(inicio.getDato().equals(dato)){
                 removed = removeFirst();
             }
+            else if(fin.getDato().equals(dato))
+                removed = removeLast();
             else{
                 try{
                     while(!auxiliar.getDireccion().getDato().equals(dato)){
@@ -220,7 +238,7 @@ public class LinkedList<T> implements Iterable<T>{
             if(auxiliar.getDireccion().getDireccion().getDato().equals(dato)){
                 eliminado = auxiliar.getDireccion();
                 auxiliar.setDireccion(eliminado.getDireccion());
-                eliminado = null;
+                eliminado.setDireccion(null);
                 return true;
             }
             else
@@ -256,8 +274,10 @@ public class LinkedList<T> implements Iterable<T>{
         if(auxiliar.getDireccion() != null){//no he llegado a fin 
             if(auxiliar.getDato().equals(dato)){
                 eliminado = auxiliar.getDireccion();
+                if(eliminado == fin)
+                    fin = auxiliar;
                 auxiliar.setDireccion(eliminado.getDireccion());
-                eliminado = null;
+                eliminado.setDireccion(null);//romper ties con el eliminado
                 return true;
             }
             else
@@ -325,54 +345,84 @@ public class LinkedList<T> implements Iterable<T>{
         sb.append("Elementos de la lista: \n");
         return toString(auxiliar, sb);
     }
-     
+    
+    /**
+     * Metodo recursivo auxiliar que elimina repetidos
+     * @param auxiliar: nodo actual
+     * @return 
+     */
     private int eliminaTodosRepetidosOrdenado(Nodo<T> auxiliar){
         Nodo<T> siguiente, siguienteSiguiente;
         
         siguiente = auxiliar.getDireccion();
-        if(siguiente != null){
+        if(siguiente != null){//todavia no llego al fin
             if(siguiente.getDato().equals(auxiliar.getDato())){
                 siguienteSiguiente = siguiente.getDireccion();
                 auxiliar.setDireccion(siguienteSiguiente);
-                siguiente = null;
+                siguiente.setDireccion(null);
                 if(siguienteSiguiente != null)//hay mas datos despues del que voy a eliminar
                     return 1 + eliminaTodosRepetidosOrdenado(auxiliar);
-                else//el dato que voy a eliminar es el ultimo
+                else{//el dato que voy a eliminar es el ultimo
+                    fin = auxiliar;
                     return 1;
+                }
             }
             else
                 return eliminaTodosRepetidosOrdenado(siguiente);
         }
-        else//auxiliar es fin
+        else{//auxiliar es fin
+            fin = auxiliar;
             return 0;
+        }
     }
     
+    /**
+     * Elimina los repetidos ordenados de la ee
+     * @return: numero de repetidos eliminados 
+     */
     public int eliminaTodosRepetidosOrdenado(){
         int eliminados;
         
         eliminados = 0;
         if(!isEmpty() && inicio != fin)
+            
+            //Llamo al metodo auxiliar recursivo
             eliminados = eliminaTodosRepetidosOrdenado(inicio);
         return eliminados;
     }
     
+    /**
+     * Metodo auxiliar recursivo que elimina los repetidos
+     * @param conjunto: en donde se iran metiendo todos los elementos
+     * @param auxiliar: el nodo en el que me encuentro actualmente
+     * @return: 
+     * 0 si llegue al fin de la ee
+     * Llamada recursiva + 1 si elimine un repetido y aun no llego al fin
+     * Llamada recursiva si aun no llego al fin
+     */
     private int eliminaTodosRepetidosDesordenado(ConjuntoA<T> conjunto, Nodo<T> auxiliar){
         Nodo<T> siguiente;
         
         siguiente = auxiliar.getDireccion();
         if(siguiente != null){
             if(!conjunto.add(siguiente.getDato())){//esta repetido
-                auxiliar.setDireccion(siguiente.getDireccion());
-                siguiente = null;
+                auxiliar.setDireccion(siguiente.getDireccion());//elimino el nodo repetido
+                siguiente.setDireccion(null);//elimino referencias del repetido
                 return 1 + eliminaTodosRepetidosDesordenado(conjunto, auxiliar);
             }
             else
                 return eliminaTodosRepetidosDesordenado(conjunto, siguiente);
         }
-        else//auxiliar es fin
-            return 0;    
+        else{//auxiliar es fin
+            fin = auxiliar;
+            return 0;   
+        }
     }
     
+    /**
+     * Elimina los repetidos, aunque no esten en orden, de la ee
+     * @return: el numero de datos repetidos en la ee 
+     */
     public int eliminaTodosRepetidosDesordenado(){
         ConjuntoA<T> conjunto;
         int contador; 
@@ -381,31 +431,115 @@ public class LinkedList<T> implements Iterable<T>{
         if(!isEmpty()){
             conjunto = new ConjuntoA();
             conjunto.add(inicio.getDato());
+            
+            //Llama al metodo recursivo que elimina a los repetidos
             contador = eliminaTodosRepetidosDesordenado(conjunto, inicio);
         }
         return contador;
     }
     
+
+    /**
+     * Determina si dos ee son iguales, comparando elemento por elemento
+     * @param otra
+     * @return 
+     */
+    @Override
     public boolean equals(Object otra){
-        boolean iguales;
+        boolean iguales, comparacion;
         Iterator<T> iterador, iteradorOtra;
         LinkedList<T> otraLista;
         
         iguales = false;
         if(otra != null){
-            if(otra == this)
+            if(otra == this)//si tienen la misma direccion
                 iguales = true;
-            else if(otra instanceof LinkedList){
-                otraLista = (LinkedList<T>)otra;
+            else if(otra.getClass() == getClass()){//Si son del mismo tipo
+                otraLista = (LinkedList<T>)otra;//castea
                 iteradorOtra = otraLista.iterator();
                 iterador = this.iterator();
-                iguales = true;
-                while(iterador.hasNext() && iteradorOtra.hasNext() && iguales){
-                    
-                }
-            }
+                comparacion = true;
                 
+                //loop para comparar elemento por elemento
+                while(iterador.hasNext() && iteradorOtra.hasNext() && comparacion)
+                    comparacion = iterador.next().equals(iteradorOtra.next());
+                
+                //Si se recorrieron todos los elementos de las ees y todos 
+                //fueron iguales
+                if(!iterador.hasNext() && !iteradorOtra.hasNext() && comparacion)
+                    iguales = true;
+            }      
         }
+        return iguales;
     }
+    
+    /**
+     * Metodo que a partir de dos estructuras, forma una, alternando los nodos
+     * de estas en la medida de lo posible
+     * @param otra
+     * @return: 
+     * Si las dos estan vacias, regresa una vacia. 
+     * Si solo una esta vacia, la mezcla esta hecha por la que si tenia 
+     * elementos. 
+     * Si otra es null, regresa null.
+     * Si las dos tienen elementos, regresa la mezcla de ambas EE.
+     */
+    public LinkedList<T> mezclaEstructuras(LinkedList<T> otra){
+        boolean vacia, otraVacia;
+        Nodo<T> aux, auxOtra, apuntador, apuntadorOtra;
+        
+        try{
+            vacia = isEmpty();
+            otraVacia = otra.isEmpty();
+            if(otraVacia && !vacia){
+                
+                //doy los datos de this a otra para que se mezclen
+                otra.fin = this.fin;
+                otra.inicio = this.inicio;
+            }
+            else if(!otraVacia && vacia){
+                
+                //Dos info de otra a this para que otra y this sean la misma esdtructura
+                fin = otra.fin;
+                inicio = otra.inicio;
+            }
+            else if(!vacia && !otraVacia){
+                
+                aux = inicio;
+                apuntador = aux;
+                auxOtra = otra.inicio;
+                apuntadorOtra = auxOtra;
+                
+                //while para conectar todos los nodos hasta llegar al ultimo
+                while(aux.getDireccion() != null && auxOtra.getDireccion() != 
+                        null){
+                    aux = aux.getDireccion();//paso al sig para guardar info
+                    auxOtra = auxOtra.getDireccion();//paso al sig para guardar info
+                    apuntador.setDireccion(apuntadorOtra);//apunta al nodo de otra
+                    apuntador = aux;//me voy con la info de this
+                    apuntadorOtra.setDireccion(apuntador);
+                    apuntadorOtra = auxOtra;//me voy con la info de otra
+                }
+                otra.inicio = inicio;
+                if(aux.getDireccion() != null && auxOtra.getDireccion()
+                        == null){//this es mas largo
+                    apuntador.setDireccion(apuntadorOtra);
+                    apuntadorOtra.setDireccion(aux.getDireccion());
+                    otra.fin = fin;
+                }
+                else{//otra es mas largo o son del mismo tamano
+                    apuntador.setDireccion(apuntadorOtra);
+                    fin = otra.fin;
+                }  
+            } 
+            
+            //si los dos estan vacios, se regresa una EE vacia
+        }catch(NullPointerException e){//otra es null. No se pueden mezclar
+            
+        }
+        return otra;
+    }
+
+    
      
 }
