@@ -21,28 +21,39 @@ public class PilaEE2<T> implements PilaADT<T>{
 
     @Override
     public boolean equals(Object obj) {
-        boolean iguales;
+        boolean iguales, comparacion;
         PilaEE2<T> otra;
         Nodo<T> aux, auxOtra;
         
+        iguales = false;
         if(obj != null){
             if(obj == this)
                 iguales = true;
-            else if(obj instanceof PilaEE2){
+            else if(obj.getClass() == getClass()){
                 otra = (PilaEE2<T>) obj;
-                iguales = true;
-                
-                while(!isEmpty() && iguales && auxObj.getDireccion() != null){
+                comparacion = true;
+                auxOtra = otra.tope;
+                aux = tope;
+                while(aux != null && comparacion && auxOtra != null){
                     
+                    //comparar dato por dato hasta llegar a la direccion del ultimo nodo
+                    comparacion = aux.getDato().equals(auxOtra.getDato());
+                    aux = aux.getDireccion();
+                    auxOtra = auxOtra.getDireccion();
                 }
+                if(aux == null && comparacion && auxOtra == null)
+                    iguales = true;
             }
         }
+        return iguales;
     }
     
+    @Override
     public boolean isEmpty(){
         return tope == null;
     }
     
+    @Override
     public void push(T dato){
         Nodo<T> nuevo = new Nodo(dato);
         nuevo.setDireccion(tope);
